@@ -1,5 +1,0 @@
-/Users/davebrunner/Documents/git/TSM_ProgAlg/exercises/build/CMakeFiles/edit_cache.dir
-/Users/davebrunner/Documents/git/TSM_ProgAlg/exercises/build/CMakeFiles/rebuild_cache.dir
-/Users/davebrunner/Documents/git/TSM_ProgAlg/exercises/build/01_C++/CMakeFiles/01-CPP.dir
-/Users/davebrunner/Documents/git/TSM_ProgAlg/exercises/build/01_C++/CMakeFiles/edit_cache.dir
-/Users/davebrunner/Documents/git/TSM_ProgAlg/exercises/build/01_C++/CMakeFiles/rebuild_cache.dir
