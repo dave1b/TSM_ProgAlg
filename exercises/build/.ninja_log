@@ -1,0 +1,5 @@
+# ninja log v5
+4	40	1708545870839582235	01_C++/CMakeFiles/01-CPP.dir/main.cpp.o	6ca8c6bdb85926c7
+4	522	1708545871320972701	01_C++/CMakeFiles/01-CPP.dir/rangequery.cpp.o	302db671619e0073
+4	393	1708545871189582975	01_C++/CMakeFiles/01-CPP.dir/summation.cpp.o	1f449a1c94d1745e
+4	423	1708545871222304739	01_C++/CMakeFiles/01-CPP.dir/findmax.cpp.o	ee08f4a97b710d1d

@@ -1,0 +1,96 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stopwatch", "Stopwatch\Stopwatch.vcxitems", "{74A74747-BAF9-4117-BC01-0745B25B763E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FreeImage", "FreeImage\FreeImage.vcxitems", "{2E9F6654-D8FA-4CA6-80E6-E9E244567606}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_C++", "01_C++\01_C++.vcxproj", "{04DE10A2-C35A-4F4F-A5BB-FA17C3669157}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04_OpenMP", "04_OpenMP\04_OpenMP.vcxproj", "{55742C4D-9CD0-4402-A12E-476455BDBCEB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05_Sorting", "05_Sorting\05_Sorting.vcxproj", "{6B5D5048-33F6-40CA-9ECE-C68D81ED5831}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06_TaskMapping", "06_TaskMapping\06_TaskMapping.vcxproj", "{F371BD28-DB41-4D06-B5D5-CA644D2A0421}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08_MPI", "08_MPI\08_MPI.vcxproj", "{AE8E3B49-174C-4A5B-A97F-F935317CE248}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "09_MPI_Collective", "09_MPI_Collective\09_MPI_Collective.vcxproj", "{62E6A82E-1FAA-426F-8F0E-3DEA077BE4D1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "10_MPI_Sorting", "10_MPI_Sorting\10_MPI_Sorting.vcxproj", "{7F7C18C9-5953-412E-954F-3F198789AB6D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "11_MPI_Numeric", "11_MPI_Numeric\11_MPI_Numeric.vcxproj", "{565F88C9-0574-4520-9C37-4E528BAB0F8A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "12_SYCL", "12_SYCL\12_SYCL.vcxproj", "{3045C8DB-B4BF-47CC-A713-448D0616189F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "13_ImageProcessing", "13_ImageProcessing\13_ImageProcessing.vcxproj", "{BE30EC6B-B500-4448-B27F-651FAABF1652}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04DE10A2-C35A-4F4F-A5BB-FA17C3669157}.Debug|x64.ActiveCfg = Debug|x64
+		{04DE10A2-C35A-4F4F-A5BB-FA17C3669157}.Debug|x64.Build.0 = Debug|x64
+		{04DE10A2-C35A-4F4F-A5BB-FA17C3669157}.Release|x64.ActiveCfg = Release|x64
+		{04DE10A2-C35A-4F4F-A5BB-FA17C3669157}.Release|x64.Build.0 = Release|x64
+		{55742C4D-9CD0-4402-A12E-476455BDBCEB}.Debug|x64.ActiveCfg = Debug|x64
+		{55742C4D-9CD0-4402-A12E-476455BDBCEB}.Debug|x64.Build.0 = Debug|x64
+		{55742C4D-9CD0-4402-A12E-476455BDBCEB}.Release|x64.ActiveCfg = Release|x64
+		{55742C4D-9CD0-4402-A12E-476455BDBCEB}.Release|x64.Build.0 = Release|x64
+		{6B5D5048-33F6-40CA-9ECE-C68D81ED5831}.Debug|x64.ActiveCfg = Debug|x64
+		{6B5D5048-33F6-40CA-9ECE-C68D81ED5831}.Debug|x64.Build.0 = Debug|x64
+		{6B5D5048-33F6-40CA-9ECE-C68D81ED5831}.Release|x64.ActiveCfg = Release|x64
+		{6B5D5048-33F6-40CA-9ECE-C68D81ED5831}.Release|x64.Build.0 = Release|x64
+		{F371BD28-DB41-4D06-B5D5-CA644D2A0421}.Debug|x64.ActiveCfg = Debug|x64
+		{F371BD28-DB41-4D06-B5D5-CA644D2A0421}.Debug|x64.Build.0 = Debug|x64
+		{F371BD28-DB41-4D06-B5D5-CA644D2A0421}.Release|x64.ActiveCfg = Release|x64
+		{F371BD28-DB41-4D06-B5D5-CA644D2A0421}.Release|x64.Build.0 = Release|x64
+		{AE8E3B49-174C-4A5B-A97F-F935317CE248}.Debug|x64.ActiveCfg = Debug|x64
+		{AE8E3B49-174C-4A5B-A97F-F935317CE248}.Debug|x64.Build.0 = Debug|x64
+		{AE8E3B49-174C-4A5B-A97F-F935317CE248}.Release|x64.ActiveCfg = Release|x64
+		{AE8E3B49-174C-4A5B-A97F-F935317CE248}.Release|x64.Build.0 = Release|x64
+		{62E6A82E-1FAA-426F-8F0E-3DEA077BE4D1}.Debug|x64.ActiveCfg = Debug|x64
+		{62E6A82E-1FAA-426F-8F0E-3DEA077BE4D1}.Debug|x64.Build.0 = Debug|x64
+		{62E6A82E-1FAA-426F-8F0E-3DEA077BE4D1}.Release|x64.ActiveCfg = Release|x64
+		{62E6A82E-1FAA-426F-8F0E-3DEA077BE4D1}.Release|x64.Build.0 = Release|x64
+		{7F7C18C9-5953-412E-954F-3F198789AB6D}.Debug|x64.ActiveCfg = Debug|x64
+		{7F7C18C9-5953-412E-954F-3F198789AB6D}.Debug|x64.Build.0 = Debug|x64
+		{7F7C18C9-5953-412E-954F-3F198789AB6D}.Release|x64.ActiveCfg = Release|x64
+		{7F7C18C9-5953-412E-954F-3F198789AB6D}.Release|x64.Build.0 = Release|x64
+		{565F88C9-0574-4520-9C37-4E528BAB0F8A}.Debug|x64.ActiveCfg = Debug|x64
+		{565F88C9-0574-4520-9C37-4E528BAB0F8A}.Debug|x64.Build.0 = Debug|x64
+		{565F88C9-0574-4520-9C37-4E528BAB0F8A}.Release|x64.ActiveCfg = Release|x64
+		{565F88C9-0574-4520-9C37-4E528BAB0F8A}.Release|x64.Build.0 = Release|x64
+		{3045C8DB-B4BF-47CC-A713-448D0616189F}.Debug|x64.ActiveCfg = Debug|x64
+		{3045C8DB-B4BF-47CC-A713-448D0616189F}.Debug|x64.Build.0 = Debug|x64
+		{3045C8DB-B4BF-47CC-A713-448D0616189F}.Release|x64.ActiveCfg = Release|x64
+		{3045C8DB-B4BF-47CC-A713-448D0616189F}.Release|x64.Build.0 = Release|x64
+		{BE30EC6B-B500-4448-B27F-651FAABF1652}.Debug|x64.ActiveCfg = Debug|x64
+		{BE30EC6B-B500-4448-B27F-651FAABF1652}.Debug|x64.Build.0 = Debug|x64
+		{BE30EC6B-B500-4448-B27F-651FAABF1652}.Release|x64.ActiveCfg = Release|x64
+		{BE30EC6B-B500-4448-B27F-651FAABF1652}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C6B285B-B4CE-4A45-9587-D23154F39399}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Stopwatch\Stopwatch.vcxitems*{04de10a2-c35a-4f4f-a5bb-fa17c3669157}*SharedItemsImports = 4
+		FreeImage\FreeImage.vcxitems*{2e9f6654-d8fa-4ca6-80e6-e9e244567606}*SharedItemsImports = 9
+		Stopwatch\Stopwatch.vcxitems*{3045c8db-b4bf-47cc-a713-448d0616189f}*SharedItemsImports = 4
+		FreeImage\FreeImage.vcxitems*{55742c4d-9cd0-4402-a12e-476455bdbceb}*SharedItemsImports = 4
+		Stopwatch\Stopwatch.vcxitems*{55742c4d-9cd0-4402-a12e-476455bdbceb}*SharedItemsImports = 4
+		Stopwatch\Stopwatch.vcxitems*{565f88c9-0574-4520-9c37-4e528bab0f8a}*SharedItemsImports = 4
+		Stopwatch\Stopwatch.vcxitems*{6b5d5048-33f6-40ca-9ece-c68d81ed5831}*SharedItemsImports = 4
+		Stopwatch\Stopwatch.vcxitems*{74a74747-baf9-4117-bc01-0745b25b763e}*SharedItemsImports = 9
+		FreeImage\FreeImage.vcxitems*{be30ec6b-b500-4448-b27f-651faabf1652}*SharedItemsImports = 4
+		Stopwatch\Stopwatch.vcxitems*{be30ec6b-b500-4448-b27f-651faabf1652}*SharedItemsImports = 4
+		Stopwatch\Stopwatch.vcxitems*{f371bd28-db41-4d06-b5d5-ca644d2a0421}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal
