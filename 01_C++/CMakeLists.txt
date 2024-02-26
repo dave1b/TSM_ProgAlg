@@ -16,7 +16,7 @@ add_executable(${TARGET_NAME} ${SOURCE_FILES})
 target_include_directories(${TARGET_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/Stopwatch")
 
 # Add library for parallel execution
-target_link_libraries(${TARGET_NAME} tbb)
+# target_link_libraries(${TARGET_NAME} mpich)
 
 # Set compiler and linker options
 #add_sycl_to_target(TARGET ${TARGET_NAME} SOURCES ${SOURCE_FILES})

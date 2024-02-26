@@ -10,84 +10,120 @@
 #include <random>
 #include "Stopwatch.h"
 
-class Point {
+class Point
+{
 	float x, y, z;
 
 public:
 	Point(float a, float b, float c) : x(a), y(b), z(c) {}
 
-	bool operator==(const Point& p) const {
+	bool operator==(const Point &p) const
+	{
 		return x == p.x && y == p.y && z == p.z;
 	}
 
-	bool operator<(const Point& p) const {
+	bool operator<(const Point &p) const
+	{
 		return std::lexicographical_compare(&x, &x + 3, &p.x, &p.x + 3);
 	}
 
-	bool operator<=(const Point& p) const {
+	bool operator<=(const Point &p) const
+	{
 		return x <= p.x && y <= p.y && z <= p.z;
 	}
 
-	Point operator+(const Point& p) const {
-		return { x + p.x, y + p.y, z + p.z };
+	Point operator+(const Point &p) const
+	{
+		return {x + p.x, y + p.y, z + p.z};
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const Point& p) {
+	friend std::ostream &operator<<(std::ostream &os, const Point &p)
+	{
 		return os << '(' << p.x << ',' << p.y << ',' << p.z << ')';
 	}
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Sequential range query
-static std::vector<Point> rqSerial(std::vector<Point>& v, const Point& from, const Point& to) {
+static std::vector<Point> rqSerial(std::vector<Point> &v, const Point &from, const Point &to)
+{
 	std::vector<Point> result;
 
-	std::for_each(v.begin(), v.end(), [from, to, &result](const Point& p) {
-		if (from <= p && p <= to) result.push_back(p);
-	});
+	std::for_each(v.begin(), v.end(), [from, to, &result](const Point &p)
+				  {
+		if (from <= p && p <= to) result.push_back(p); });
 	return result;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Parallel range query
-static std::vector<Point> rqPar1(std::vector<Point>& v, const Point& from, const Point& to) {
+static std::vector<Point> rqPar1(std::vector<Point> &v, const Point &from, const Point &to)
+{
 	std::vector<Point> result;
+
+	std::mutex mutex;
 
 	// TODO use std::mutex for thread safe access of result
+	std::for_each(v.begin(), v.end(), [from, to, &result, &mutex](const Point &p)
+				  {
+		if (from <= p && p <= to)
+		{
+			std::lock_guard<std::mutex> lock(mutex);
+			result.push_back(p);
+		} });
 	return result;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Parallel range query
-static std::vector<Point> rqPar2(std::vector<Point>& v, const Point& from, const Point& to) {
+static std::vector<Point> rqPar2(std::vector<Point> &v, const Point &from, const Point &to)
+{
 	const auto nThreads = std::thread::hardware_concurrency();
 
 	std::vector<Point> result;
+	std::vector<std::future<std::vector<Point>>> futures;
 
-	// TODO: don't use synchronization, but serial reduction
+	for (unsigned int i = 0; i < nThreads; i++)
+	{
+		futures.emplace_back(std::async(std::launch::async, [&v, from, to, i, nThreads]
+										{       
+										std::vector<Point> res;      
+										for (size_t j = i; j < v.size(); j += nThreads) {      
+											   const Point& p = v[j];         
+											   if (from <= p && p <= to) res.push_back(p);       }       
+											   return res; }));
+	}
+	for (auto &f : futures)
+	{
+		std::vector<Point> res = f.get();
+		result.insert(result.end(), res.begin(), res.end());
+	}
 	return result;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Check and print results
-template<typename T>
-static void check(const char text[], const T& ref, const T& result, double ts, double tp) {
+template <typename T>
+static void check(const char text[], const T &ref, const T &result, double ts, double tp)
+{
 	static const unsigned p = std::thread::hardware_concurrency();
-	const double S = ts/tp;
-	const double E = S/p;
+	const double S = ts / tp;
+	const double E = S / p;
 
 	std::cout << std::setw(30) << std::left << text << result.size();
 	std::cout << " in " << std::right << std::setw(6) << std::setprecision(2) << std::fixed << tp << " ms, S = " << S << ", E = " << E << std::endl;
-	std::cout << std::boolalpha << "The two operations produce the same results: " << (ref == result) << std::endl << std::endl;
+	std::cout << std::boolalpha << "The two operations produce the same results: " << (ref == result) << std::endl
+			  << std::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Different range query tests
-void rangeQuery() {
+void rangeQuery()
+{
 	std::cout << "\nRange Query Tests" << std::endl;
 
 	constexpr int N = 10'000'000;
-	
+
 	std::default_random_engine e;
 	std::uniform_real_distribution<float> dist;
 	Stopwatch sw;
@@ -97,7 +133,8 @@ void rangeQuery() {
 	//	Point to = from + Point(0.1f, 0.1f, 0.1f);
 
 	points.reserve(N);
-	for (int i = 0; i < N; i++) points.emplace_back(dist(e), dist(e), dist(e));
+	for (int i = 0; i < N; i++)
+		points.emplace_back(dist(e), dist(e), dist(e));
 
 	sw.Start();
 	std::vector<Point> resultS = rqSerial(points, from, to);
@@ -118,4 +155,3 @@ void rangeQuery() {
 	std::sort(result2.begin(), result2.end());
 	check("Parallel reduction:", resultS, result2, ts, sw.GetElapsedTimeMilliseconds());
 }
-

@@ -10,16 +10,19 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Explicit computation
-static int64_t sum(const int64_t n) {
-	return n*(n + 1)/2;
+static int64_t sum(const int64_t n)
+{
+	return n * (n + 1) / 2;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Sequential summation
-static int64_t sumSerial(const std::vector<int>& arr) {
+static int64_t sumSerial(const std::vector<int> &arr)
+{
 	int64_t sum = 0;
 
-	for (auto& v : arr) {
+	for (auto &v : arr)
+	{
 		sum += v;
 	}
 	return sum;
@@ -27,29 +30,51 @@ static int64_t sumSerial(const std::vector<int>& arr) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Parallel summation using parallel for_each in C++20 and atomic_int64_t
-static int64_t sumPar1(const std::vector<int>& arr) {
-	// TODO: use std::atomic_int64_t and std::for_each with std::execution::par
-	return 0;
+static int64_t sumPar1(const std::vector<int> &arr)
+{
+	std::atomic_int64_t sum{0}; // Atomic integer to store the sum
+
+	// Iterate through the vector in parallel and accumulate the sum
+	std::for_each(std::execution::par, arr.begin(), arr.end(),
+				  [&sum](int value)
+				  {
+					  sum += value;
+				  });
+
+	return sum; // Return the accumulated sum
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Parallel summation using parallel reduce in C++20 and implicit reduction
-static int64_t sumPar2(const std::vector<int>& arr) {
-	// TODO use std::reduce
-	return 0;
+static int64_t sumPar2(const std::vector<int> &arr)
+{
+	std::atomic_int64_t sum{0};
+	sum = std::reduce(std::execution::par, arr.begin(), arr.end(), 0LL);
+	return sum;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Parallel summation using parallel reduce in C++20 and explicit reduction
-static int64_t sumPar3(const std::vector<int>& arr) {
+static int64_t sumPar3(const std::vector<int> &arr)
+{
 	// TODO use std::reduce and lambda expression [](int64_t a, int64_t b) {... }
+	return std::reduce(std::execution::par, arr.begin(), arr.end(), 0LL,
+							  [](int64_t a, int64_t b)
+							  {
+								  return a + b;
+							  });
 	return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Different summation tests
-void summation() {
+void summation()
+{
 	std::cout << "\nSummation Tests" << std::endl;
+	static const unsigned p = std::thread::hardware_concurrency();
+	std::cout << "Processing units " << p << std::endl;
+
+	// 𝑇𝑇𝑆𝑆 is the sequential runtime, 𝑇𝑇𝑃𝑃 is the parallel runtime, and 𝑝𝑝 is the number of processing units.
 
 	Stopwatch sw;
 	std::vector<int> arr(10'000'000);
