@@ -18,7 +18,7 @@ add_executable(${TARGET_NAME} ${SOURCE_FILES})
 target_include_directories(${TARGET_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/Stopwatch")
 
 # Add library for parallel execution
-target_link_libraries(${TARGET_NAME} tbb)
+# target_link_libraries(${TARGET_NAME} tbb)
 
 # Set compiler and linker options
-target_link_options(${TARGET_NAME} PRIVATE ${DPCPP_FLAGS} -qopenmp)
+target_link_options(${TARGET_NAME} PRIVATE ${DPCPP_FLAGS} -fopenmp)
