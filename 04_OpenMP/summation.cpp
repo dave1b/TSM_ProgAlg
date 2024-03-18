@@ -32,16 +32,14 @@ static int64_t sumSerial(const std::vector<int> &arr)
 static int64_t sumPar1(const std::vector<int> &arr)
 {
 	int64_t sum = 0;
+	#pragma omp parallel for shared(sum)
 	for (auto &v : arr)
 	{
 #pragma omp critical
-		{
-			sum += v;
-		}
+		sum += v;
 	}
 	return sum;
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Parallel summation with explicit locks
 static int64_t sumPar2(const std::vector<int> &arr)
@@ -51,10 +49,10 @@ static int64_t sumPar2(const std::vector<int> &arr)
 	omp_lock_t write_lock;
 	omp_init_lock(&write_lock);
 #pragma omp parallel for schedule(static)
-	for (auto &v : arr)
+	for (int i = 0; i < (int)arr.size(); i++)
 	{
 		omp_set_lock(&write_lock);
-		sum += v;
+		sum += arr[i];
 		omp_unset_lock(&write_lock);
 	}
 	omp_destroy_lock(&write_lock);
@@ -66,11 +64,12 @@ static int64_t sumPar2(const std::vector<int> &arr)
 static int64_t sumPar3(const std::vector<int> &arr)
 {
 	int64_t sum = 0;
-#pragma omp parallel default(none) shared(sum)
+#pragma omp parallel shared(sum)
 #pragma omp for schedule(static)
-	for (auto &v : arr)
+	for (int i = 0; i < (int)arr.size(); i++)
 	{
-		sum += v;
+#pragma omp atomic
+		sum += arr[i];
 	}
 	return sum;
 }

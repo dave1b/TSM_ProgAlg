@@ -10,7 +10,7 @@ project (${TARGET_NAME})
 # specify C++ compiler
 if(UNIX)
     # Direct CMake to use icpx rather than the default C++ compiler/linker
-    # set(CMAKE_CXX_COMPILER mpicxx)
+    # set(CMAKE_CXX_COMPILER icpx)
 else() # Windows
     # Force CMake to use icx-cl rather than the default C++ compiler/linker 
     # (needed on Windows only)
@@ -50,9 +50,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Include sub-projects.
-add_subdirectory(01_C++)
+# add_subdirectory(01_C++)
 # add_subdirectory(04_OpenMP)
-# add_subdirectory(05_Sorting)
+add_subdirectory(05_Sorting)
 # add_subdirectory(06_TaskMapping)
 # add_subdirectory(08_MPI)
 # add_subdirectory(09_MPI_Collective)

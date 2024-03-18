@@ -11,36 +11,47 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Sequential Bitonic sort (used in performance tests)
 // n must be a power of 2
-static void bitonicSortSeq(float a[], const int n) {
+static void bitonicSortSeq(float a[], const int n)
+{
 	// compute d = log(n)
 	int nn = n;
 	int d = 0;
 
-	while (nn) {
+	while (nn)
+	{
 		d++;
 		nn >>= 1;
 	}
 
 	int biti = 1;
-	for (int i = 0; i < d; i++) {
+	for (int i = 0; i < d; i++)
+	{
 		int bitj = biti; // bit j
 
 		biti <<= 1; // bit i + 1
-		for (int j = i; j >= 0; j--) {
-			for (int k = 0; k < n; k++) {
+		for (int j = i; j >= 0; j--)
+		{
+			for (int k = 0; k < n; k++)
+			{
 				const int m = (~k & bitj) | (k & ~bitj); // xor
 
-				if (m > k && m < n) {
+				if (m > k && m < n)
+				{
 					const bool bi = (k & biti) != 0;
 					const bool bj = (k & bitj) != 0;
-					if (bi == bj) {
+					if (bi == bj)
+					{
 						// comp_exchange_min on channel k with m
 						// k takes the min, m the max
-						if (a[k] > a[m]) std::swap(a[k], a[m]);
-					} else {
+						if (a[k] > a[m])
+							std::swap(a[k], a[m]);
+					}
+					else
+					{
 						// comp_exchange_max on channel k with m
 						// k takes the max, m the min
-						if (a[k] < a[m]) std::swap(a[k], a[m]);
+						if (a[k] < a[m])
+							std::swap(a[k], a[m]);
 					}
 				}
 			}
@@ -53,15 +64,60 @@ static void bitonicSortSeq(float a[], const int n) {
 // Bitonic sort implementation for p = n
 // n must be a power of 2
 // p parallel threads
-static void bitonicSortOMP1(float a[], const int n, const int p) {
-	// TODO use OMP
+static void bitonicSortOMP1(float a[], const int n, const int p)
+{
+	// compute d = log(n)
+	int nn = n;
+	int d = 0;
+
+	while (nn)
+	{
+		d++;
+		nn >>= 1;
+	}
+
+	int biti = 1;
+	for (int i = 0; i < d; i++)
+	{
+		int bitj = biti; // bit j
+
+		biti <<= 1; // bit i + 1
+		for (int j = i; j >= 0; j--)
+		{
+#pragma omp parallel for // Parallelize the outer loop
+			for (int k = 0; k < n; k++)
+			{
+				const int m = (~k & bitj) | (k & ~bitj); // xor
+
+				if (m > k && m < n)
+				{
+					const bool bi = (k & biti) != 0;
+					const bool bj = (k & bitj) != 0;
+					if (bi == bj)
+					{
+						// comp_exchange_min on channel k with m
+						if (a[k] > a[m])
+							std::swap(a[k], a[m]);
+					}
+					else
+					{
+						// comp_exchange_max on channel k with m
+						if (a[k] < a[m])
+							std::swap(a[k], a[m]);
+					}
+				}
+			}
+			bitj >>= 1;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // compare-split of nlocal data elements
 // input: a and b
 // output: small and large
-static void compareSplit(int nlocal, float* a, float* b, float* small, float* large) {
+static void compareSplit(int nlocal, float *a, float *b, float *small, float *large)
+{
 	// TODO use OMP
 }
 
@@ -70,12 +126,14 @@ static void compareSplit(int nlocal, float* a, float* b, float* small, float* la
 // (used in performance tests)
 // n and p must be a power of 2
 // p parallel threads
-void bitonicSortOMP2(float a[], const int n, const int p) {
+void bitonicSortOMP2(float a[], const int n, const int p)
+{
 	// TODO use OMP
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-void bitonicsort(int n) {
+void bitonicsort(int n)
+{
 	std::cout << "\nBitonic Sort Tests" << std::endl;
 	Stopwatch sw;
 	std::default_random_engine e;
@@ -85,7 +143,8 @@ void bitonicsort(int n) {
 	std::vector<float> sort(n);
 
 	// init arrays
-	for (int i = 0; i < n; i++) sortRef[i] = data[i] = dist(e);
+	for (int i = 0; i < n; i++)
+		sortRef[i] = data[i] = dist(e);
 	int p = omp_get_num_procs();
 
 	// omp settings

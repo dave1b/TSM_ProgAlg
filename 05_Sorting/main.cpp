@@ -4,9 +4,11 @@ void bitonicsort(int n);
 void quicksort(int n);
 
 ////////////////////////////////////////////////////////////////////////////////////////
-int main() {
+int main()
+{
 	// speed measurements
-	for (int i = 15; i <= 27; i += 3) {
+	for (int i = 15; i <= 27; i += 3)
+	{
 		bitonicsort(1 << i);
 		quicksort(1 << i);
 	}

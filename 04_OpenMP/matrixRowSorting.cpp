@@ -22,12 +22,11 @@ void matrixSortSeq(std::vector<std::vector<int>> &A)
 // parallel sorting all arrays A[i]
 void matrixSortOmp(std::vector<std::vector<int>> &A)
 {
-#pragma omp parallel for default(none) shared(A) num_threads(4)
+#pragma omp parallel for default(none) shared(A) schedule(static)
 
-	#pragma omp for schedule(dynamic, 16)
 	for (size_t i = 0; i < A.size(); i++)
 	{
-		std::sort(A[i].begin(), A[i].end());
+		sort(A[i].begin(), A[i].end());
 	}
 }
 
