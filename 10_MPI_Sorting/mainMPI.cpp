@@ -1,22 +1,19 @@
-#include <ctime>
-#include <cstdlib>
 #include <string>
 #include <iostream>
 #include "mpi.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Prototypes
-void oddevensort();
-void shellsort();
+void oddEvenSortTests();
+void shellSortTests();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-int main(int argc, char* argv[]) {
-	srand((unsigned int)time(nullptr));
-
+int main(int argc, char *argv[])
+{
 	MPI_Init(&argc, &argv);
 
-	oddevensort();
-	shellsort();
+	oddEvenSortTests();
+	shellSortTests();
 
 	MPI_Finalize();
 }

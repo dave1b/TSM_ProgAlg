@@ -18,4 +18,4 @@ add_executable(${TARGET_NAME} ${SOURCE_FILES})
 target_include_directories(${TARGET_NAME} PRIVATE ${MPI_CXX_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}/Stopwatch")
 
 # Add library for distributed execution
-target_link_libraries(${TARGET_NAME} mpi)
+target_link_libraries(${TARGET_NAME} PRIVATE ${MPI_C_LIBRARIES})
