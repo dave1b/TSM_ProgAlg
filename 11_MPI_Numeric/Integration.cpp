@@ -7,7 +7,33 @@
 // midpoint or rectangle rule
 static double rectangleRule(int nIntervals) {
 	// TODO use MPI
-	return 0;
+	double pi = 0;
+	int nProcs;
+	int myID;
+
+	MPI_Comm_size(MPI_COMM_WORLD, &nProcs);
+	MPI_Comm_rank(MPI_COMM_WORLD, &myID);
+
+	// numerical integrate f
+	const double w = 1.0/nIntervals;
+	const int blockLen = (nIntervals + nProcs - 1)/nProcs; // ceiling
+	const int idx = myID*blockLen;
+
+	double fsum = 0.0;
+
+	// use block partitioning
+	for(int i = idx; i < std::min(nIntervals, idx + blockLen); ++i) {
+		const double x = (i + 0.5)*w;
+		fsum += 1.0/(1.0 + x*x);
+	}
+	
+	// use cyclic partitioning
+	/*for (int interval = id; interval < nIntervals; interval += p) {
+		double x = w*(interval + 0.5);
+		fsum += 1.0/(1.0 + x*x);
+	}
+	*/
+	return w*fsum;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,11 +41,39 @@ static double rectangleRule(int nIntervals) {
 // trapezoidal rule
 static double trapezoidalRule(int nIntervals) {
 	// TODO use MPI
-	return 0;
+	double pi = 0;
+	int nProcs;
+	int myID;
+
+	MPI_Comm_size(MPI_COMM_WORLD, &nProcs);
+	MPI_Comm_rank(MPI_COMM_WORLD, &myID);
+
+	// numerical integrate f
+	const int blockLen = (nIntervals + nProcs - 1)/nProcs; // ceiling
+	const double w = 1.0/nIntervals;
+	const int idx = myID*blockLen;
+
+	double fsum = 0;
+
+	if (idx < nIntervals) {
+		const double x = idx*w;
+		fsum = 1.0/(1.0 + x*x);
+		if (idx == 0) fsum /= 2.0;
+
+		for(int i = idx + 1; i < std::min(nIntervals, idx + blockLen); ++i) {
+			const double x = i*w;
+			fsum += 1.0/(1.0 + x*x);
+		}
+	}
+	if (myID == nProcs - 1) {
+		fsum += 0.25;
+	}
+
+	return w*fsum;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-void integration() {
+void integrationTests() {
 	constexpr double ReferencePI = 3.141592653589793238462643; //ref value of pi for comparison
 	int id, p;
 
@@ -27,7 +81,7 @@ void integration() {
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
 
 	if (id == 0) {
-		std::cout << "\nNumerical integration" << std::endl;
+		std::cout << std::endl << "Numerical integration" << std::endl;
 
 		std::cout << "number of MPI processes = " << p << std::endl;
 	}
@@ -37,7 +91,7 @@ void integration() {
 
 	if (id == 0) {
 		// if this is the Rank 0 node... 
-		std::cout << "\nPlease enter the number of integration intervals: ";
+		std::cout << std::endl << "Please enter the number of integration intervals: ";
 		std::cin >> nIntervals;
 		if (nIntervals <= 0) {
 			std::cout <<  "NumIntervals must be greater than 0" << std::endl;
