@@ -3,11 +3,12 @@
 // Here are two function declartions. The implementations of these function are in different
 // compilation units: imageprocessing.cpp and summation.cpp
 // It's the task of the C++ linker to put all parts of a program together.
-void summation();
-void matrixRowSorting();
+void summationTests();
+void matrixRowSortingTests();
 
 // main program
-int main() {
-	summation();
-	matrixRowSorting();
+int main()
+{
+	// summationTests();
+	matrixRowSortingTests();
 }

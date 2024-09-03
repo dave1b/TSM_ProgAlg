@@ -12,11 +12,11 @@ set(TESTS_DIR "${PROJECT_SOURCE_DIR}/Tests")
 # Search modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+find_package(CUDA)
 find_package(FreeImage REQUIRED)
 find_package(FreeImagePlus REQUIRED)
 find_package(SYCL REQUIRED)
 find_package(OpenMP REQUIRED)
-find_package(CUDA)
 
 # Set source files (h-files are optional)
 set(SOURCE_FILES "main.cpp" "imageprocessing.cpp")
@@ -29,15 +29,15 @@ target_include_directories(${TARGET_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/Stopwat
 #target_include_directories(${TARGET_NAME} PRIVATE "${FREEIMAGEPLUS_INCLUDE_PATH}")
 
 # Add library for parallel execution
-target_link_libraries(${TARGET_NAME} PRIVATE tbb "${FREEIMAGEPLUS_LIBRARIES}" "${FREEIMAGE_LIBRARIES}")
+# target_link_libraries(${TARGET_NAME} PRIVATE tbb "${FREEIMAGEPLUS_LIBRARIES}" "${FREEIMAGE_LIBRARIES}")
 
 # Set compiler and linker options
 if(CUDA_VERSION_MAJOR)
     message(STATUS "CUDA available")
-    set(DPCPP_FLAGS ${DPCPP_FLAGS} -qopenmp -fsycl -fsycl-targets=nvptx64-nvidia-cuda)
+    set(DPCPP_FLAGS ${DPCPP_FLAGS} -fopenmp -fsycl -fsycl-targets=nvptx64-nvidia-cuda)
 else()
     message(STATUS "CUDA not found")
-    set(DPCPP_FLAGS ${DPCPP_FLAGS} -qopenmp -fsycl)
+    set(DPCPP_FLAGS ${DPCPP_FLAGS} -fopenmp -fsycl)
 endif()
 add_sycl_to_target(TARGET ${TARGET_NAME} SOURCES ${SOURCE_FILES})
 

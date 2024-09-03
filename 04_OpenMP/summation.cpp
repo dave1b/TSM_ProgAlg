@@ -31,8 +31,9 @@ static int64_t sumSerial(const std::vector<int> &arr)
 // Parallel summation with critical section
 static int64_t sumPar1(const std::vector<int> &arr)
 {
+	// TODO use OMP for loop parallelization and an OMP critical section
 	int64_t sum = 0;
-	#pragma omp parallel for shared(sum)
+#pragma omp parallel for
 	for (auto &v : arr)
 	{
 #pragma omp critical
@@ -40,38 +41,36 @@ static int64_t sumPar1(const std::vector<int> &arr)
 	}
 	return sum;
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Parallel summation with explicit locks
 static int64_t sumPar2(const std::vector<int> &arr)
 {
-	// TODO use OMP for loop parallelization and an OMP lock
 	int64_t sum = 0;
-	omp_lock_t write_lock;
-	omp_init_lock(&write_lock);
-#pragma omp parallel for schedule(static)
-	for (int i = 0; i < (int)arr.size(); i++)
+	omp_lock_t lock;
+	omp_init_lock(&lock);
+#pragma omp parallel for
+	for (auto &v : arr)
 	{
-		omp_set_lock(&write_lock);
-		sum += arr[i];
-		omp_unset_lock(&write_lock);
+		omp_set_lock(&lock);
+		sum += v;
+		omp_unset_lock(&lock);
 	}
-	omp_destroy_lock(&write_lock);
+
 	return sum;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-// Parallel summation with OMP for loop parallelization
+// Parallel summation with ...
 static int64_t sumPar3(const std::vector<int> &arr)
 {
+	// TODO use OMP for loop parallelization and...
 	int64_t sum = 0;
-#pragma omp parallel shared(sum)
-#pragma omp for schedule(static)
-	for (int i = 0; i < (int)arr.size(); i++)
+	#pragma omp parallel for reduction(+ : sum)
+	for (auto &v : arr)
 	{
-#pragma omp atomic
-		sum += arr[i];
+		sum += v;
 	}
-	return sum;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +90,7 @@ static void check(const char text[], const T &ref, const T &result, double ts, d
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Different summation tests
-void summation()
+void summationTests()
 {
 	std::cout << "\nSummation Tests" << std::endl;
 

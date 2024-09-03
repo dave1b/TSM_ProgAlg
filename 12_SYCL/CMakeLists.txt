@@ -9,12 +9,12 @@ set(TARGET_NAME 12-SYCL)
 # Search modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+find_package(CUDA)
 find_package(SYCL REQUIRED)
 find_package(OpenMP REQUIRED)
-find_package(CUDA)
 
 # Set source files (h-files are optional)
-set(SOURCE_FILES "main.cpp")
+set(SOURCE_FILES "main.cpp" "vectoradd.cpp" "matrixmult.cpp")
 
 # Add source to this project's executable.
 add_executable(${TARGET_NAME} ${SOURCE_FILES})
@@ -23,14 +23,17 @@ add_executable(${TARGET_NAME} ${SOURCE_FILES})
 target_include_directories(${TARGET_NAME} PRIVATE "${PROJECT_SOURCE_DIR}/Stopwatch")
 
 # Add library for parallel execution
-target_link_libraries(${TARGET_NAME} PRIVATE tbb)
+# target_link_libraries(${TARGET_NAME} PRIVATE tbb)
+target_link_libraries(${TARGET_NAME} PRIVATE ${TBB_IMPORTED_TARGETS})
+
+
 
 # Set compiler and linker options
 if(CUDA_VERSION_MAJOR)
     message(STATUS "CUDA available")
-    set(DPCPP_FLAGS ${DPCPP_FLAGS} -qopenmp -fsycl -fsycl-targets=nvptx64-nvidia-cuda)
+    set(DPCPP_FLAGS ${DPCPP_FLAGS} -fopenmp -fsycl -fsycl-targets=nvptx64-nvidia-cuda)
 else()
     message(STATUS "CUDA not found")
-    set(DPCPP_FLAGS ${DPCPP_FLAGS} -qopenmp -fsycl)
+    set(DPCPP_FLAGS ${DPCPP_FLAGS} -fopenmp -fsycl)
 endif()
 add_sycl_to_target(TARGET ${TARGET_NAME} SOURCES ${SOURCE_FILES})

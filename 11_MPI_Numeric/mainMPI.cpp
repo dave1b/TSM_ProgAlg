@@ -2,16 +2,20 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // function declarations
-void matrixmultiplication();
-void integration();
+void matrixMultiplicationTests();
+void cannonsTests();
+void integrationTests();
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Matrix multiplaction tests
+// For OpenMP performance measurements don't use mpirun, just run the program standalone
 int main() {
+	matrixMultiplicationTests();
+
 	MPI_Init(nullptr, nullptr);
 
-	matrixmultiplication();
-	integration();
+	cannonsTests();
+	integrationTests();
 
 	MPI_Finalize();
 }

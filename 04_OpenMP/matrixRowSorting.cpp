@@ -22,11 +22,18 @@ void matrixSortSeq(std::vector<std::vector<int>> &A)
 // parallel sorting all arrays A[i]
 void matrixSortOmp(std::vector<std::vector<int>> &A)
 {
-#pragma omp parallel for default(none) shared(A) schedule(static)
-
+	// TODO use OMP to parallelize a for loop
+	int max_threads = omp_get_max_threads();
+	omp_set_num_threads(max_threads);
+	int n_threads = omp_get_num_threads();
+	int size = A.size();
+	int chunk = size / n_threads;
+	std::cout << "Number of threads: " << n_threads << std::endl;
+	std::cout << "Max number of threads: " << max_threads << std::endl;
+#pragma omp parallel for shared(A) schedule(static, chunk) num_threads(max_threads)
 	for (size_t i = 0; i < A.size(); i++)
 	{
-		sort(A[i].begin(), A[i].end());
+		std::sort(A[i].begin(), A[i].end());
 	}
 }
 
@@ -46,13 +53,13 @@ static void check(const char text[], const T &ref, const T &result, double ts, d
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-void matrixRowSorting()
+void matrixRowSortingTests()
 {
 	std::cout << "\nMatrix Row Sorting Tests" << std::endl;
 
 	Stopwatch swSER, swOMP;
 	std::default_random_engine e;
-	std::uniform_real_distribution<float> dist;
+	std::uniform_int_distribution dist;
 
 	for (size_t n1 = 1000; n1 <= 2000; n1 += 200)
 	{

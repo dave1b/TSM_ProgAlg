@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	MPI_Init(&argc, &argv);
 
 	oddEvenSortTests();
-	shellSortTests();
+	// shellSortTests();
 
 	MPI_Finalize();
 }

@@ -1,17 +1,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 // this function is implemented in summation.cpp
-void summation();
+void summationTests();
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // this function is implemented in findmax.cpp
-void findMaximum();
+void findMaximumTests();
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // this function is implemented in rangequery.cpp
-void rangeQuery();
+void rangeQueryTests();
 
 int main() {
-	summation();
-	findMaximum();
-	rangeQuery();
+	summationTests();
+	findMaximumTests();
+	rangeQueryTests();
 }

@@ -119,11 +119,17 @@ Create a subfolder for your Git repositories in you Linux home directory with th
 
 Now start Visual Studio Code and close any automatically opened folder. Then select "Clone Git Repository..." from the welcome page or use Ctrl-Shift-P to select the "Git: Clone" task. Enter the URL of the repository in the input field that opens: https://gitlab.fhnw.ch/progalg/exercises.git. Then select the previously created folder '~/git/exercises' as the destination for the repository and click OK.
 
+Visual Studio Code is always asking for Git credentials. You can change this default behaviour by turning on the credential helper so that Git will save your password in memory for some time. 
+```shell
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+git config --global credential.helper cache
+```
 
 ### Setup IntelliSense Configurations
 https://code.visualstudio.com/docs/cpp/customize-default-settings-cpp
 
-Open the file '12_SYCL/main.cpp' in the VS Code editor. In the code editor you see the red underlined source code line '#include <sycl/sycl.hpp>'. Press on the offered code actions and choose 'Edit "includePath" settings'. In case the IntelliSense Configuration window does not open but an access error appears, then run the following command in the terminal window and try again:
+Open the file '12_SYCL/vectoradd.cpp' in the VS Code editor. In case the code editor shows you the source code line '#include <sycl/sycl.hpp>' red underlined, then press on the offered code actions and choose 'Edit "includePath" settings'. In case the IntelliSense Configuration window does not open but an access error appears, then run the following command in the terminal window and try again:
 ```shell
 sudo chown -R $USER:$USER /home/
 ```

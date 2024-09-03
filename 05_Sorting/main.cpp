@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // global variables, prototypes
-void bitonicsort(int n);
-void quicksort(int n);
+void bitonicsortTests(int n);
+void quicksortTests(int n);
 
 ////////////////////////////////////////////////////////////////////////////////////////
 int main()
@@ -9,7 +9,7 @@ int main()
 	// speed measurements
 	for (int i = 15; i <= 27; i += 3)
 	{
-		bitonicsort(1 << i);
-		quicksort(1 << i);
+		// // bitonicsortTests(1 << i);
+		// quicksortTests(1 << i);
 	}
 }

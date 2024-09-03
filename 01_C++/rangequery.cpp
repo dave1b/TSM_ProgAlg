@@ -61,15 +61,15 @@ static std::vector<Point> rqPar1(std::vector<Point> &v, const Point &from, const
 {
 	std::vector<Point> result;
 
-	std::mutex mutex;
-
 	// TODO use std::mutex for thread safe access of result
-	std::for_each(v.begin(), v.end(), [from, to, &result, &mutex](const Point &p)
+	std::mutex m;
+	std::for_each(std::execution::par, v.begin(), v.end(), [from, to, &result, &m](const Point &p)
 				  {
 		if (from <= p && p <= to)
 		{
-			std::lock_guard<std::mutex> lock(mutex);
+			std::lock_guard<std::mutex> lock(m);
 			result.push_back(p);
+			
 		} });
 	return result;
 }
@@ -81,17 +81,19 @@ static std::vector<Point> rqPar2(std::vector<Point> &v, const Point &from, const
 	const auto nThreads = std::thread::hardware_concurrency();
 
 	std::vector<Point> result;
-	std::vector<std::future<std::vector<Point>>> futures;
 
+	// TODO: don't use synchronization, but serial reduction
+	std::vector<std::future<std::vector<Point>>> futures;
 	for (unsigned int i = 0; i < nThreads; i++)
 	{
 		futures.emplace_back(std::async(std::launch::async, [&v, from, to, i, nThreads]
-										{       
-										std::vector<Point> res;      
-										for (size_t j = i; j < v.size(); j += nThreads) {      
-											   const Point& p = v[j];         
-											   if (from <= p && p <= to) res.push_back(p);       }       
-											   return res; }));
+										{
+      std::vector < Point > res;
+      for (size_t j = i; j < v.size(); j += nThreads) {
+        const Point & p = v[j];
+        if (from <= p && p <= to) res.push_back(p);
+      }
+      return res; }));
 	}
 	for (auto &f : futures)
 	{
@@ -118,7 +120,7 @@ static void check(const char text[], const T &ref, const T &result, double ts, d
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Different range query tests
-void rangeQuery()
+void rangeQueryTests()
 {
 	std::cout << "\nRange Query Tests" << std::endl;
 

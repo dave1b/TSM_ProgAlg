@@ -58,6 +58,33 @@ static void process() {
 	show(p, id, v1, "start");
 
 	// TODO use MPI collective operations
+	MPI_Bcast(v1.data(), 1, MPI_INT, 0, MPI_COMM_WORLD);
+	show(p, id, v1, "after Bcast");
+
+	MPI_Scan(v1.data(), v2.data(), 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+	show(p, id, v2, "after Scan");
+
+	MPI_Allgather(v2.data(), 1, MPI_INT, v1.data(), 1, MPI_INT, MPI_COMM_WORLD);
+	show(p, id, v1, "after Allgather");
+
+	MPI_Allreduce(v1.data(), v2.data(), p, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+	show(p, id, v2, "after Allreduce");
+
+	init(v1);
+	MPI_Exscan(v2.data(), v1.data(), p, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+	show(p, id, v1, "after Exscan");
+
+	MPI_Alltoall(v1.data(), 1, MPI_INT, v2.data(), 1, MPI_INT, MPI_COMM_WORLD);
+	show(p, id, v2, "after Alltoall");
+
+	std::vector<int> count(p, 1);
+	init(v1);
+	MPI_Reduce_scatter(v2.data(), v1.data(), count.data(), MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+	show(p, id, v1, "after Reduce_scatter");
+
+	init(v2);
+	MPI_Reduce(v1.data(), v2.data(), 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD);
+	show(p, id, v2, "after Reduce");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

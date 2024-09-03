@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Cannon.cpp" />
+    <ClCompile Include="mainMPI.cpp" />
+    <ClCompile Include="Integration.cpp" />
+    <ClCompile Include="matrixmult.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="checkresult.h" />
+  </ItemGroup>
+</Project>

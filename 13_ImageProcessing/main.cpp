@@ -16,16 +16,16 @@
 // Pixel type RGBQUAD
 // The used color pictures have 4 channels per pixel: blue, green, red, and alpha (opacity)
 #ifndef WIN32 
-typedef unsigned char BYTE;
 typedef uint32_t COLORREF;
 #endif
 
 ////////////////////////////////////////////////////////////////////////
 // function declarations
-void processSerial(const fipImage& input, fipImage& output, const int* horFilter, const int* verFilter, unsigned filterSize);
-void processSerialOpt(const fipImage& input, fipImage& output, const int* horFilter, const int* verFilter, unsigned filterSize);
-void processOMP(const fipImage& input, fipImage& output, const int* horFilter, const int* verFilter, unsigned filterSize);
-void processSYCL(sycl::queue& q, const fipImage& input, fipImage& output, const int* horFilter, const int* verFilter, unsigned filterSize);
+void processSerial(const fipImage& input, fipImage& output, const int horFilter[], const int verFilter[], unsigned filterSize);
+void processSerialOpt(const fipImage& input, fipImage& output, const int horFilter[], const int verFilter[], unsigned filterSize);
+void processOMP(const fipImage& input, fipImage& output, const int horFilter[], const int verFilter[], unsigned filterSize);
+void processSYCL(sycl::queue& q, const fipImage& input, fipImage& output, const int horFilter[], const int verFilter[], unsigned filterSize);
+void processSYCLvec(sycl::queue& q, const fipImage& input, fipImage& output, const int horFilter[], const int verFilter[], unsigned filterSize);
 
 ////////////////////////////////////////////////////////////////////////
 // Equality test for images (image borders are ignored)
@@ -76,31 +76,31 @@ int main(int argc, const char* argv[]) {
 		return -4;
 	}
 
-	const int hFilter3[] = {
+	constexpr int hFilter3[] = {
 		1, 1, 1,
 		0, 0, 0,
 	   -1,-1,-1,
 	};
-	const int vFilter3[] = {
+	constexpr int vFilter3[] = {
 		1, 0,-1,
 		1, 0,-1,
 		1, 0,-1,
 	};
-	const int hFilter5[] = {
+	constexpr int hFilter5[] = {
 		0, 0, 0, 0, 0,
 		1, 1, 1, 1, 1,
 		0, 0, 0, 0, 0,
 	   -1,-1,-1,-1,-1,
 	    0, 0, 0, 0, 0,
 	};
-	const int vFilter5[] = {
+	constexpr int vFilter5[] = {
 		0, 1, 0,-1, 0,
 		0, 1, 0,-1, 0,
 		0, 1, 0,-1, 0,
 		0, 1, 0,-1, 0,
 		0, 1, 0,-1, 0,
 	};
-	const int hFilter7[] = {
+	constexpr int hFilter7[] = {
 		0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0,
 		1, 1, 1, 1, 1, 1, 1,
@@ -109,7 +109,7 @@ int main(int argc, const char* argv[]) {
 	    0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0,
 	};
-	const int vFilter7[] = {
+	constexpr int vFilter7[] = {
 		0, 0, 1, 0,-1, 0, 0,
 		0, 0, 1, 0,-1, 0, 0,
 		0, 0, 1, 0,-1, 0, 0,
@@ -118,7 +118,7 @@ int main(int argc, const char* argv[]) {
 		0, 0, 1, 0,-1, 0, 0,
 		0, 0, 1, 0,-1, 0, 0,
 	};
-	const int hFilter9[] = {
+	constexpr int hFilter9[] = {
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -129,7 +129,7 @@ int main(int argc, const char* argv[]) {
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0,
 	};
-	const int vFilter9[] = {
+	constexpr int vFilter9[] = {
 		0, 0, 0, 1, 0,-1, 0, 0, 0,
 		0, 0, 0, 1, 0,-1, 0, 0, 0,
 		0, 0, 0, 1, 0,-1, 0, 0, 0,
@@ -140,7 +140,7 @@ int main(int argc, const char* argv[]) {
 		0, 0, 0, 1, 0,-1, 0, 0, 0,
 		0, 0, 0, 1, 0,-1, 0, 0, 0,
 	};
-	const int hFilter11[] = {
+	constexpr int hFilter11[] = {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -153,7 +153,7 @@ int main(int argc, const char* argv[]) {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	};
-	const int vFilter11[] = {
+	constexpr int vFilter11[] = {
 		0, 0, 0, 0, 1, 0,-1, 0, 0, 0, 0,
 		0, 0, 0, 0, 1, 0,-1, 0, 0, 0, 0,
 		0, 0, 0, 0, 1, 0,-1, 0, 0, 0, 0,
@@ -166,6 +166,8 @@ int main(int argc, const char* argv[]) {
 		0, 0, 0, 0, 1, 0,-1, 0, 0, 0, 0,
 		0, 0, 0, 0, 1, 0,-1, 0, 0, 0, 0,
 	};
+
+	constexpr bool SaveImages = false;
 
 	// Create an exception handler for asynchronous SYCL exceptions
 	auto exception_handler = [](sycl::exception_list e_list) {
@@ -236,26 +238,34 @@ int main(int argc, const char* argv[]) {
 	sw.Stop();
 	check("OpenMP:", out1, out3, tsOpt, sw.GetElapsedTimeMilliseconds(), fSize);
 
-	// process image on GPU with SYCL and produce out4
-	std::ostringstream oss;
+	// process image on GPU with SYCL and produce out4 and out5
+	auto selector = sycl::default_selector_v; // The default device selector will select the most performant device.
+	sycl::queue q(selector, exception_handler);
 
-	std::cout << "Start SYCL on GPU" << std::endl;
+	std::cout << "SYCL on " << q.get_device().get_info<sycl::info::device::name>() << std::endl;
+
 	try {
-		auto selector = sycl::default_selector_v; // The default device selector will select the most performant device.
-		//auto selector = sycl::aspect_selector(sycl::aspect::cpu); // uses the CPU as the underlying OpenCL device
-		sycl::queue q(selector, exception_handler);
 		sw.Restart();
 		processSYCL(q, image, out4, hFilter, vFilter, fSize);
 		q.wait(); // wait until compute tasks on GPU done
 		sw.Stop();
-		oss << "SYCL on " << q.get_device().get_info<sycl::info::device::name>() << ": ";
-		check(oss.str().c_str(), out1, out4, tsOpt, sw.GetElapsedTimeMilliseconds(), fSize);
+		check("GPU:", out1, out4, tsOpt, sw.GetElapsedTimeMilliseconds(), fSize);
 	} catch (const std::exception& e) {
 		std::cout << "An exception is caught for processSYCL: " << e.what() << std::endl;
 	}
 
+	try {
+		sw.Restart();
+		processSYCLvec(q, image, out5, hFilter, vFilter, fSize);
+		q.wait(); // wait until compute tasks on GPU done
+		sw.Stop();
+		check("GPUvec:", out1, out5, tsOpt, sw.GetElapsedTimeMilliseconds(), fSize);
+	} catch (const std::exception& e) {
+		std::cout << "An exception is caught for processSYCLvec: " << e.what() << std::endl;
+	}
+
 	// save output images
-	{
+	if constexpr (SaveImages) {
 		std::cout << "Save output images" << std::endl;
 		std::string outSuffix(argv[3]), outName;
 
@@ -273,6 +283,10 @@ int main(int argc, const char* argv[]) {
 		}
 		outName = "SYCL_" + outSuffix;
 		if (!out4.save(outName.c_str())) {
+			std::cerr << "Image not saved: " << outName << std::endl;
+		}
+		outName = "Vec_" + outSuffix;
+		if (!out5.save(outName.c_str())) {
 			std::cerr << "Image not saved: " << outName << std::endl;
 		}
 	}

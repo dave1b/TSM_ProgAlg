@@ -134,6 +134,7 @@ void oddEvenSort(int n)
 		if (std::is_sorted(sorted.begin(), sorted.end()))
 		{
 			std::cout << n << " elements have been sorted in ascending order in " << elapsed << " s" << std::endl;
+			std::cout << elapsed << " s" << std::endl;
 			std::cout << p << " processes" << std::endl;
 		}
 		else
@@ -166,6 +167,7 @@ void oddEvenSort2(int n)
 	const int nlocal = n / p;
 	n = nlocal * p;
 
+	// TODO use MPI
 	// TODO use MPI
 	std::vector<float> elements;
 	std::vector<float> sorted;
